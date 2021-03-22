@@ -11,7 +11,7 @@
     $ source version.conf
     $ bash 0.presetCN.sh
     ```
-    
+
 * 폐쇄망 설치 스크립트 실행순서
     ```bash
     $ source version.conf
@@ -33,17 +33,9 @@
     ```
 
 ## Install Steps(Open Network)
-* Kubefedctl 설치 
-    ```bash
-    $ source version.conf      
-    $ curl -LO https://github.com/kubernetes-sigs/kubefed/releases/download/v${VERSION}/kubefedctl-${VERSION}-${OS}-${ARCH}.tgz
-    $ tar -zxvf kubefedctl-*.tgz
-    $ chmod u+x kubefedctl
-    $ mv kubefedctl /usr/local/bin/
-    ```
-
 * Federation 설치
-    ```bash    
+    ```bash
+    $ chmod +x *.sh
     $ bash 1.1.initON.sh
     ```
 
