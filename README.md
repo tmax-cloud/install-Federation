@@ -23,7 +23,7 @@
     ```bash
     $ kubectl get pod -n kube-federation-system (step.0에서 설정한 namespace)
     ```
-    ![image](figure/pod.JPG)
+    ![image](figure/pod.jpg)
 ## Step 2. federation 제거
 * 목적 : federation 제거
 * 제거 순서 :
@@ -43,7 +43,7 @@
     ```bash
     $ kubectl get pod -n kube-federation-system
     ```
-    ![image](figure/pod.JPG)
+    ![image](figure/pod.jpg)
 
 ## Uninstall Steps
 * Federation의 CRD 제거 및 바이너리, yaml등의 리소스 삭제
