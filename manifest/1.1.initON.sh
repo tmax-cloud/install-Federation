@@ -12,5 +12,5 @@ sed -i 's/${FED_VERSION}/'${FED_VERSION}'/g' yaml/_install/2.federation-v${FED_V
 sed -i 's/${CA_CERT}/'${CA_CERT}'/g' yaml/_install/2.federation-v${FED_VERSION}.yaml
 sed -i 's/${CA_KEY}/'${CA_KEY}'/g' yaml/_install/2.federation-v${FED_VERSION}.yaml
 sed -i 's/${CA_BUNDLE}/'${CA_BUNDLE}'/g' yaml/_install/2.federation-v${FED_VERSION}.yaml
-sed -i 's/\\/ /g' yaml/_install/2.federation-v${FED_VERSION}.yaml
+sed -i 's/\\\\/ /g' yaml/_install/2.federation-v${FED_VERSION}.yaml
 kubectl apply -f yaml/_install/2.federation-v${FED_VERSION}.yaml
