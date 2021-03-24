@@ -862,6 +862,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: kubefed-ca-issuer
+  namespace: ${FED_NS}
 spec:
   selfSigned: {}
 ---
@@ -876,8 +877,10 @@ spec:
   issuerRef:
     name: kubefed-ca-issuer
   commonName: kube-root-ca.crt
+  #{{ .Values.certManager.rootCertificate.commonName }}
   dnsNames:
     kubernetes.io/service-account-token
+    #{{- toYaml .Values.certManager.rootCertificate.dnsNames | nindent 4 }}
   isCA: true
 #---
 # Create an Issuer that uses the above generated CA certificate to issue certs
@@ -885,6 +888,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: kubefed-issuer
+  namespace: ${FED_NS}
 spec:
   ca:
     secretName: kubefed-root-ca
@@ -894,6 +898,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: kubefed-certificate
+  namespace: ${FED_NS}
 spec:
   secretName: kubefed-admission-webhook-serving-cert
   duration: 8760h # 1y
