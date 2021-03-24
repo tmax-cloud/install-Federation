@@ -3,6 +3,17 @@ kind: Namespace
 metadata:
   name: ${FED_NS}
 ---
+# Source: kubefed/charts/controllermanager/templates/webhook.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: ${FED_NS}
+  name: kubefed-admission-webhook-serving-cert
+type: kubernetes.io/tls
+stringData:
+  tls.crt: "${CA_CERT}"
+  tls.key: "${CA_KEY}"
+---
 # Source: kubefed/charts/controllermanager/templates/serviceaccounts.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -779,7 +790,7 @@ webhooks:
       namespace: "${FED_NS}"
       name: kubefed-admission-webhook
       path: /apis/mutation.core.kubefed.io/v1beta1/kubefedconfigs
-    #caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    caBundle: "${CA_BUNDLE}"
   rules:
   - operations:
     - CREATE
@@ -798,8 +809,7 @@ metadata:
 # For namespace scoped deployments, create a unique cluster-scoped resource
 # using the namespace.
   name: validations.core.kubefed.io
-  annotations:
-    cert-manager.io/inject-ca-from: kube-federation-system/kubefed-admission-webhook-serving-cert
+
 webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
   clientConfig:
@@ -807,7 +817,7 @@ webhooks:
       namespace: "${FED_NS}"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/federatedtypeconfigs
-    #caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    caBundle: "${CA_BUNDLE}"
   rules:
   - operations:
     - CREATE
@@ -826,7 +836,7 @@ webhooks:
       namespace: "${FED_NS}"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedclusters
-    #caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    caBundle: "${CA_BUNDLE}"
   rules:
   - operations:
     - CREATE
@@ -845,7 +855,7 @@ webhooks:
       namespace: "${FED_NS}"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedconfigs
-    #caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    caBundle: "${CA_BUNDLE}"
   rules:
   - operations:
     - CREATE
@@ -857,54 +867,3 @@ webhooks:
     resources:
     - kubefedconfigs
   failurePolicy: Fail
----
-apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
-metadata:
-  name: kubefed-ca-issuer
-  namespace: ${FED_NS}
-spec:
-  selfSigned: {}
----
-# Generate a CA Certificate used to sign certificates for the webhook
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  name: kubefed-root-certificate
-spec:
-  secretName: kubefed-root-ca
-  duration: 8760h # 1y
-  issuerRef:
-    name: kubefed-ca-issuer
-  commonName: kube-root-ca.crt
-  #{{ .Values.certManager.rootCertificate.commonName }}
-  dnsNames:
-    kubernetes.io/service-account-token
-    #{{- toYaml .Values.certManager.rootCertificate.dnsNames | nindent 4 }}
-  isCA: true
-#---
-# Create an Issuer that uses the above generated CA certificate to issue certs
-apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
-metadata:
-  name: kubefed-issuer
-  namespace: ${FED_NS}
-spec:
-  ca:
-    secretName: kubefed-root-ca
----
-# Finally, generate a serving certificate for the webhook to use
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  name: kubefed-certificate
-  namespace: ${FED_NS}
-spec:
-  secretName: kubefed-admission-webhook-serving-cert
-  duration: 8760h # 1y
-  issuerRef:
-    name: kubefed-issuer
-  dnsNames:
-    - kubefed-admission-webhook
-    - kubefed-admission-webhook.kube-federation-system
-    - kubefed-admission-webhook.kube-federation-system.svc
