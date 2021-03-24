@@ -464,7 +464,7 @@ spec:
       serviceAccountName: kubefed-admission-webhook
       containers:
       - name: admission-webhook
-        image: "quay.io/kubernetes-multicluster/kubefed:${FED_VERSION}"
+        image: "quay.io/kubernetes-multicluster/kubefed:v${FED_VERSION}"
         imagePullPolicy: "IfNotPresent"
         command:
         - "/hyperfed/webhook"
@@ -514,7 +514,7 @@ spec:
       containers:
       - command:
         - /hyperfed/controller-manager
-        image: "quay.io/kubernetes-multicluster/kubefed:${FED_VERSION}"
+        image: "quay.io/kubernetes-multicluster/kubefed:v${FED_VERSION}"
         imagePullPolicy: "IfNotPresent"
         name: controller-manager
         ports:
