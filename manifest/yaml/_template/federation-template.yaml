@@ -866,19 +866,19 @@ spec:
   selfSigned: {}
 ---
 # Generate a CA Certificate used to sign certificates for the webhook
-#apiVersion: cert-manager.io/v1alpha2
-#kind: Certificate
-#metadata:
-#  name: kubefed-root-certificate
-#spec:
-#  secretName: kubefed-root-ca
-#  duration: 8760h # 1y
-#  issuerRef:
-#    name: kubefed-ca-issuer
-#  commonName: {{ .Values.certManager.rootCertificate.commonName }}
-#  dnsNames:
-#    {{- toYaml .Values.certManager.rootCertificate.dnsNames | nindent 4 }}
-#  isCA: true
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: kubefed-root-certificate
+spec:
+  secretName: kubefed-root-ca
+  duration: 8760h # 1y
+  issuerRef:
+    name: kubefed-ca-issuer
+  commonName: kube-root-ca.crt
+  dnsNames:
+    kubernetes.io/service-account-token
+  isCA: true
 #---
 # Create an Issuer that uses the above generated CA certificate to issue certs
 apiVersion: cert-manager.io/v1alpha2
