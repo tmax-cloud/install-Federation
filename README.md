@@ -24,13 +24,6 @@
     $ kubectl get pod -n kube-federation-system (step.0에서 설정한 namespace)
     ```
     ![image](figure/pod.jpg)
-## Step 2. federation 제거
-* 목적 : federation 제거
-* 제거 순서 :
-    * federation 제거 script 수행
-    ```bash
-    $ ./3.deleteFed.sh
-    ```
 
 ## Install Steps(Open Network)
 * Federation 설치
