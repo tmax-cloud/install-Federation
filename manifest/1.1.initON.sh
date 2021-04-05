@@ -1,7 +1,7 @@
 curl -LO https://github.com/kubernetes-sigs/kubefed/releases/download/v${FED_VERSION}/kubefedctl-${FED_VERSION}-${OS_TYPE}-${ARCH_TYPE}.tgz
 tar -zxvf kubefedctl-*.tgz
 chmod u+x kubefedctl
-mv kubefedctl /usr/local/bin/kubefedctl
+sudo mv kubefedctl /usr/local/bin/kubefedctl
 rm kubefedctl-*.tgz
 
 kubectl apply -f yaml/_install/1.federation-crd.yaml
