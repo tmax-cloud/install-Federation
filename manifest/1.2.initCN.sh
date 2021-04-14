@@ -1,3 +1,6 @@
+cp -r $FILE_DIR/img $HOME/install-federation/img
+sudo cp $FILE_DIR/bin/kubefedctl /usr/local/bin/kubefedctl
+
 docker load < img/kubefed_$FED_VERSION.tar
 docker tag quay.io/kubernetes-multicluster/kubefed:$FED_VERSION $REGISTRY/kubernetes-multicluster/kubefed:$FED_VERSION
 docker push $REGISTRY/kubernetes-multicluster/kubefed:$FED_VERSION

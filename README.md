@@ -14,6 +14,12 @@
 
 * 폐쇄망 설치 스크립트 실행순서
     ```bash
+    ## path 생성 및 설정
+    $ export $FILE_DIR=${file dir}
+    # ${file dir}은 img, yaml 디렉토리의 부모디렉토리로 입력해준다
+    $ mkdir $HOME/install-federation
+    $ cd $HOME/install-federation
+    ## 이 경로로 스크립트 및 yaml 디렉토리를 옮겨준다
     $ source version.conf
     $ export REGISTRY={registryIP:PORT}
     $ bash 1.1.initCN.sh
