@@ -8,21 +8,18 @@
 * 외부 네트워크 통신이 가능한 환경에서 0.presetCN.sh를 이용하여 이미지 및 패키지 다운로드 후 2.2.initCN.sh를 이용하여 폐쇄망에 Federation
 * 외부 네트워크 환경 스크립트 실행순서
     ```bash
+    $ cd manifest
+    $ chmod +x *.sh
     $ source version.conf
-    $ bash 0.presetCN.sh
+    $ bash 0.preset-cn.sh
     ```
 
 * 폐쇄망 설치 스크립트 실행순서
     ```bash
-    ## path 생성 및 설정
-    $ export $FILE_DIR=${file dir}
-    # ${file dir}은 img, yaml 디렉토리의 부모디렉토리로 입력해준다
-    $ mkdir $HOME/install-federation
-    $ cd $HOME/install-federation
-    ## 이 경로로 스크립트 및 yaml 디렉토리를 옮겨준다
+    $ cd manifest
     $ source version.conf
     $ export REGISTRY={registryIP:PORT}
-    $ bash 1.1.initCN.sh
+    $ bash 1.2.install-fed-cn.sh
     ```
 
 * 정상 동작 확인
@@ -34,8 +31,9 @@
 ## Install Steps(Open Network)
 * Federation 설치
     ```bash
+    $ cd manifest
     $ chmod +x *.sh
-    $ bash 1.1.initON.sh
+    $ bash 1.1.install-fed-on.sh
     ```
 
 * 정상 동작 확인
@@ -47,6 +45,7 @@
 ## Uninstall Steps
 * Federation의 CRD 제거 및 바이너리, yaml등의 리소스 삭제
     ```bash
+    $ cd manifest
     $ source version.conf
-    $ bash 2.deleteFed.sh
+    $ bash 2.delete-fed.sh
     ```
