@@ -24,7 +24,7 @@
 
 * 정상 동작 확인
     ```bash
-    $ kubectl get pod -n kube-federation-system (step.0에서 설정한 namespace)
+    $ kubectl get pod -n kube-federation-system
     ```
     ![image](figure/pod.jpg)
 
