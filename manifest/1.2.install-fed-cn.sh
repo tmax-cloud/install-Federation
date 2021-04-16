@@ -1,8 +1,8 @@
 sudo cp bin/kubefedctl /usr/local/bin/kubefedctl
 
-sudo docker load < img/kubefed_$FED_VERSION.tar
-sudo docker tag quay.io/kubernetes-multicluster/kubefed:$FED_VERSION $REGISTRY/kubernetes-multicluster/kubefed:$FED_VERSION
-sudo docker push $REGISTRY/kubernetes-multicluster/kubefed:$FED_VERSION
+sudo docker load < img/kubefed_v$FED_VERSION.tar
+sudo docker tag quay.io/kubernetes-multicluster/kubefed:v$FED_VERSION $REGISTRY/kubernetes-multicluster/kubefed:v$FED_VERSION
+sudo docker push $REGISTRY/kubernetes-multicluster/kubefed:v$FED_VERSION
 
 kubectl apply -f yaml/_install/1.federation-crd.yaml
 
