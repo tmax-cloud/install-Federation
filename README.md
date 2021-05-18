@@ -38,6 +38,7 @@
 * Federation 설치
     ```bash
     $ cd manifest
+    $ source version.conf
     $ chmod +x *.sh
     $ bash 1.1.install-fed-on.sh
     ```
