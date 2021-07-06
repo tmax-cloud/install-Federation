@@ -17,8 +17,8 @@ sed -i 's/${CA_KEY}/'"${CA_KEY}"'/g' yaml/federation-${FED_VERSION}.yaml
 sed -i 's/${CA_BUNDLE}/'"${CA_BUNDLE}"'/g' yaml/federation-${FED_VERSION}.yaml
 kubectl apply -f yaml/federation-${FED_VERSION}.yaml
 
-sed -i 's/${FED_NS}/'"${FED_NS}"'/g' yaml/federated-type-config-${FED_VERSION}.yaml
-kubectl apply -f yaml/federated-type-config-${FED_VERSION}.yaml
+#sed -i 's/${FED_NS}/'"${FED_NS}"'/g' yaml/federated-type-config-${FED_VERSION}.yaml
+#kubectl apply -f yaml/federated-type-config-${FED_VERSION}.yaml
 
 HYPERCLOUD_CRD="po hpa ds sts cj" 
 for crd in ${HYPERCLOUD_CRD}; do
