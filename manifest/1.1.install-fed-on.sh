@@ -1,5 +1,6 @@
 source version.conf
 
+chmod +x bin/kubefedctl
 sudo cp bin/kubefedctl /usr/local/bin/kubefedctl
 
 kubectl apply -f yaml/federation-crd.yaml

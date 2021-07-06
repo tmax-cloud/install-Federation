@@ -1,5 +1,6 @@
 source version.conf
 
+chmod +x bin/kubefedctl
 sudo cp bin/kubefedctl /usr/local/bin/kubefedctl
 
 sudo docker load < img/kubefed_${FED_VERSION}.tar
