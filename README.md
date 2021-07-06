@@ -10,7 +10,6 @@
         ```bash
         $ cd manifest
         $ chmod +x *.sh
-        $ source version.conf
         $ bash 0.preset-cn.sh
         ```
 
@@ -23,7 +22,6 @@
         ```bash
         $ cd manifest
         $ chmod +x *.sh
-        $ source version.conf
         $ export REGISTRY={registryIP:PORT}
         $ bash 1.2.install-fed-cn.sh
         ```
@@ -38,7 +36,6 @@
 * Federation 설치
     ```bash
     $ cd manifest
-    $ source version.conf
     $ chmod +x *.sh
     $ bash 1.1.install-fed-on.sh
     ```
