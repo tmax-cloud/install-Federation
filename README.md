@@ -24,6 +24,7 @@
         $ chmod +x *.sh
         $ export REGISTRY={registryIP:PORT}
         $ bash 1.2.install-fed-cn.sh
+        $ bash 1.3.install-hypercloud-crd.sh
         ```
 
 * 정상 동작 확인
@@ -38,6 +39,7 @@
     $ cd manifest
     $ chmod +x *.sh
     $ bash 1.1.install-fed-on.sh
+    $ bash 1.3.install-hypercloud-crd.sh
     ```
 
 * 정상 동작 확인
