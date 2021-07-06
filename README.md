@@ -24,7 +24,9 @@
         $ chmod +x *.sh
         $ export REGISTRY={registryIP:PORT}
         $ bash 1.2.install-fed-cn.sh
+        ## 1.2.install-fed-cn.sh 수행 후 validation webhook이 정상 기동될때까지 waiting 필요
         $ bash 1.3.install-hypercloud-crd.sh
+        ## failed calling webhook발생시 마지막 커맨드를 다시 수행
         ```
 
 * 정상 동작 확인
@@ -39,7 +41,9 @@
     $ cd manifest
     $ chmod +x *.sh
     $ bash 1.1.install-fed-on.sh
+    ## 1.2.install-fed-cn.sh 수행 후 validation webhook이 정상 기동될때까지 waiting 필요
     $ bash 1.3.install-hypercloud-crd.sh
+    ## failed calling webhook발생시 마지막 커맨드를 다시 수행
     ```
 
 * 정상 동작 확인
