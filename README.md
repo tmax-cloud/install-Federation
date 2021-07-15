@@ -24,7 +24,9 @@
         $ chmod +x *.sh
         $ export REGISTRY={registryIP:PORT}
         $ bash 1.2.install-fed-cn.sh
-        ## 1.2.install-fed-cn.sh 수행 후 validation webhook이 정상 기동될때까지 waiting 필요
+        ## 1.2.install-fed-cn.sh 수행 후 kubefed-admission-webhook이 기동 완료될때까지 시간이 필요
+        ## Deployment(kubefed-admission-webhook), Pod(kubefed-admission-webhook-...)이 Running상태로 바뀌어도
+        ## 실제 정상기동에는 시간이 더 필요하므로 Running상태 체크 후 2~3초 후에 다음 command 실행
         $ bash 1.3.install-hypercloud-crd.sh
         ## failed calling webhook발생시 마지막 커맨드를 다시 수행
         ```
@@ -41,7 +43,9 @@
     $ cd manifest
     $ chmod +x *.sh
     $ bash 1.1.install-fed-on.sh
-    ## 1.2.install-fed-cn.sh 수행 후 validation webhook이 정상 기동될때까지 waiting 필요
+    ## 1.2.install-fed-cn.sh 수행 후 kubefed-admission-webhook이 기동 완료될때까지 시간이 필요
+    ## Deployment(kubefed-admission-webhook), Pod(kubefed-admission-webhook-...)이 Running상태로 바뀌어도
+    ## 실제 정상기동에는 시간이 더 필요하므로 Running상태 체크 후 2~3초 후에 다음 command 실행
     $ bash 1.3.install-hypercloud-crd.sh
     ## failed calling webhook발생시 마지막 커맨드를 다시 수행
     ```
