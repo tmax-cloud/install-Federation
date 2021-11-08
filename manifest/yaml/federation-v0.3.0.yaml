@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ${FED_NS}
+  name: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/webhook.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
   name: kubefed-admission-webhook-serving-cert
 type: kubernetes.io/tls
 stringData:
@@ -19,13 +19,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kubefed-controller
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/serviceaccounts.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
   name: kubefed-admission-webhook
 ---
 # Source: kubefed/charts/controllermanager/templates/aggregate_clusterroles.yaml
@@ -265,7 +265,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubefed-controller
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/clusterrolebindings.yaml
 # This clusterrolebinding grants permissions for the admission webhook to create
@@ -306,7 +306,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubefed-admission-webhook
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -316,7 +316,7 @@ metadata:
     api: kubefed
     kubebuilder.k8s.io: 1.0.0
   name: kubefed-config-role
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 rules:
 - apiGroups:
   - ""
@@ -343,7 +343,7 @@ metadata:
     api: kubefed
     kubebuilder.k8s.io: 1.0.0
   name: kubefed-admission-webhook-role
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 rules:
 - apiGroups:
   - core.kubefed.io
@@ -376,7 +376,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubefed-admission-webhook
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/rolebindings.yaml
 # Grant admission webhook access to core.kubefed.io in the KubeFed system
@@ -385,7 +385,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: kubefed-admission-webhook-rolebinding
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -393,14 +393,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubefed-admission-webhook
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/rolebindings.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: kubefed-config-rolebinding
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -408,14 +408,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubefed-controller
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 ---
 # Source: kubefed/charts/controllermanager/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: kubefed-controller-manager-metrics-service
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
   annotations:
     prometheus.io/port: "9090"
     prometheus.io/scheme: http
@@ -433,7 +433,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kubefed-admission-webhook
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   selector:
     kubefed-admission-webhook: "true"
@@ -445,7 +445,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
   name: kubefed-admission-webhook
   labels:
     kubefed-admission-webhook: "true"
@@ -464,7 +464,7 @@ spec:
       serviceAccountName: kubefed-admission-webhook
       containers:
       - name: admission-webhook
-        image: "quay.io/kubernetes-multicluster/kubefed:${FED_VERSION}"
+        image: "quay.io/kubernetes-multicluster/kubefed:v0.3.0"
         imagePullPolicy: "IfNotPresent"
         command:
         - "/hyperfed/webhook"
@@ -494,7 +494,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kubefed-controller-manager
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
   labels:
     kubefed-control-plane: controller-manager
 spec:
@@ -514,7 +514,7 @@ spec:
       containers:
       - command:
         - /hyperfed/controller-manager
-        image: "quay.io/kubernetes-multicluster/kubefed:${FED_VERSION}"
+        image: "quay.io/kubernetes-multicluster/kubefed:v0.3.0"
         imagePullPolicy: "IfNotPresent"
         name: controller-manager
         ports:
@@ -542,7 +542,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: services
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -562,7 +562,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: jobs.batch
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -583,7 +583,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: namespaces
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -603,7 +603,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: replicasets.apps
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -624,7 +624,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: serviceaccounts
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -644,7 +644,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: ingresses.extensions
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -665,7 +665,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: configmaps
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -685,7 +685,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: secrets
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -705,7 +705,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: clusterroles.rbac.authorization.k8s.io
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -726,7 +726,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: deployments.apps
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
@@ -747,7 +747,7 @@ apiVersion: core.kubefed.io/v1beta1
 kind: KubeFedConfig
 metadata:
   name: kubefed
-  namespace: ${FED_NS}
+  namespace: kube-federation-system
 spec:
   scope: "Cluster"
   controllerDuration:
@@ -786,7 +786,7 @@ webhooks:
 - name: kubefedconfigs.core.kubefed.io
   clientConfig:
     service:
-      namespace: "${FED_NS}"
+      namespace: "kube-federation-system"
       name: kubefed-admission-webhook
       path: /apis/mutation.core.kubefed.io/v1beta1/kubefedconfigs
     caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
@@ -812,7 +812,7 @@ webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
   clientConfig:
     service:
-      namespace: "${FED_NS}"
+      namespace: "kube-federation-system"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/federatedtypeconfigs
     caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
@@ -831,7 +831,7 @@ webhooks:
 - name: kubefedclusters.core.kubefed.io
   clientConfig:
     service:
-      namespace: "${FED_NS}"
+      namespace: "kube-federation-system"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedclusters
     caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
@@ -850,7 +850,7 @@ webhooks:
 - name: kubefedconfigs.core.kubefed.io
   clientConfig:
     service:
-      namespace: "${FED_NS}"
+      namespace: "kube-federation-system"
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedconfigs
     caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHekNDQWdPZ0F3SUJBZ0lSQU1YaHBjVlV5QlgyUVFZc2lyby9aUlF3RFFZSktvWklodmNOQVFFTEJRQXcKSnpFbE1DTUdBMVVFQXhNY2EzVmlaV1psWkMxaFpHMXBjM05wYjI0dGQyVmlhRzl2YXkxallUQWVGdzB5TURBNApNVEF3T0RBMU1UVmFGdzB6TURBNE1EZ3dPREExTVRWYU1DY3hKVEFqQmdOVkJBTVRIR3QxWW1WbVpXUXRZV1J0CmFYTnphVzl1TFhkbFltaHZiMnN0WTJFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDODRzV0szemdYMXV3a1htWkJGZXJKYmVKa3E4L1Y4NjBxZU15K082TWdRSXVudWpja0dFRWhJcVZiTytSWQpuV0lDV1hWNEp4WVoyNUtidDVGMVJYQ1B1ZlRXTEFCN2pKeXJIeVlSeFJMUnNML1I4MFZXQ1F0TzUyS29DVERhCnJRTm84bnNJQnNIUnl6Z2RuM25WUVBXWitSV0t1VHZ6MWEwMFllV2k4QUVpeVNvL3RoUWZ3VDRvWnU4M0UydUQKYTBCdS9aZUpIRW0wanM5MkNDdWdRVHF6MitOUnBIODI0MjZJa3NUeEF5VWJIcG12MENJTzJ2Nms4SkQ0V01ROQpVbzJaeER4MlFQU25MWFMybVI3TDZkaTV1MDVsVEZubXd4Ukl5a0FTcGNqRnY1ZVNadlBJMzZFQ0g2RUR2MjE2CnhVSE0yRHBTRXMyWUl2eWUwcDVicUd5eEFnTUJBQUdqUWpCQU1BNEdBMVVkRHdFQi93UUVBd0lDcERBZEJnTlYKSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcQpoa2lHOXcwQkFRc0ZBQU9DQVFFQWxoeHRlVFdvTldZNzAydm9nUnpJWktzRGZ3N0lHSndNMW1Idnh6RlV1akFEClB2SW5OTkFMdGxqb0t0RDJ2WkZsdGcvb2FxRXVUb2ZRK1l1bWpja0x5Sm1aR3RHNkwxZW9SUzVMeWZOMEYza0EKMUlZdjZHMXVCUzRhTExqaHZsNmFHTDdtc1JPSlhMc2xoMVo1cEt6bWpVcGFxazVvVjVZQStxMzh0K1NybWJmNQo5dXl0UTgwZ0d1Q2xoaGlMRHdBWU5MbzRUN0t3eEtoUm91Qnd2eU9OZWk2ODlZaSs4SFZEcHVrbFI5dVlhdmd2CnRBUlZGUUdEb2Z5Y25VWjJvUElYRGs2MHZLR0txdTRSZEJDdUswc3B4NDNDZmh0WkNMZHJ2TWFOZUM3WDJxTU4KNnVqVEVyK3dnYXdHa3huY2I1ajJsUmw1aGwwbE95NkN1UVVJc2hEVklBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
