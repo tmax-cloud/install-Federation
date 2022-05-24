@@ -1,6 +1,9 @@
 
 # Federation 설치 가이드
 
+## 개요
+- Kubernetes Cluster Federation (KubeFed for short) allows you to coordinate the configuration of multiple Kubernetes clusters from a single set of APIs in a hosting cluster. KubeFed aims to provide mechanisms for expressing which clusters should have their configuration managed and what that configuration should be. The mechanisms that KubeFed provides are intentionally low-level, and intended to be foundational for more complex multicluster use cases such as deploying multi-geo applications and disaster recovery.
+
 ## 구성 요소 및 버전
 * federation verion: v0.3.0 구축 요망
 
